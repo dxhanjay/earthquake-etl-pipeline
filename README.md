@@ -7,7 +7,7 @@
 
 A complete, reproducible **ETL pipeline** for live earthquake data: it extracts the USGS *Magnitude 2.5+ Earthquakes, Past Week* GeoJSON feed, cleans it with pandas under explicit data-quality rules, loads it into SQLite with an idempotent upsert design, analyses it with SQL, and renders a self-contained HTML dashboard from the database.
 
-**Live dashboard:** _deployed on Vercel — link added below after deploy_
+**Live dashboard:** https://earthquake-etl.vercel.app
 **Data source:** [USGS Earthquake Catalog feed](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson) (public domain, no API key)
 
 ## Pipeline Architecture
