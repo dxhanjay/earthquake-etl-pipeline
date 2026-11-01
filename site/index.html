@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earthquake ETL — Live Dashboard</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; background:#0d1117;
+         color:#e8e4da; padding:32px 18px 48px; }
+  .wrap { max-width:880px; margin:0 auto; }
+  h1 { font-size:30px; letter-spacing:.5px; }
+  h1 .accent { color:#e8a33d; }
+  .sub { color:#9a958a; margin:6px 0 24px; font-size:15px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+           gap:12px; margin-bottom:26px; }
+  .card { background:#161b22; border:1px solid #2a2f38; border-radius:10px;
+          padding:16px; }
+  .card .v { font-size:30px; color:#e8a33d; }
+  .card .k { color:#9a958a; font-size:13px; margin-top:4px; }
+  .card .d { font-size:13px; margin-top:6px; color:#cfc9bc; }
+  section { background:#161b22; border:1px solid #2a2f38; border-radius:10px;
+            padding:20px; margin-bottom:18px; }
+  h2 { font-size:18px; margin-bottom:14px; color:#f0ead9; }
+  .bar-row { display:flex; align-items:center; gap:10px; margin:7px 0;
+             font-size:13px; }
+  .bar-label { width:150px; color:#cfc9bc; flex:none; }
+  .bar-track { flex:1; background:#232830; border-radius:5px; height:16px; }
+  .bar { background:#e8a33d; height:16px; border-radius:5px; }
+  .bar.alt { background:#4d7fa8; }
+  .bar-num { width:110px; flex:none; color:#9a958a; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  td, th { padding:7px 8px; border-bottom:1px solid #232830; text-align:left; }
+  th { color:#9a958a; font-weight:normal; font-size:12px;
+       text-transform:uppercase; letter-spacing:.06em; }
+  td.mag { color:#e8a33d; font-weight:bold; white-space:nowrap; }
+  footer { color:#6e6a61; font-size:13px; line-height:1.6; }
+  a { color:#e8a33d; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🌍 Earthquake <span class="accent">ETL</span> — This Week on Earth</h1>
+  <p class="sub">USGS Magnitude 2.5+ earthquakes · 2026-10-25 09:38:10 → 2026-11-01 08:46:14 (UTC) ·
+     extracted, cleaned, quality-checked and loaded by an automated pipeline ·
+     dashboard generated 01 Nov 2026, 09:33 UTC</p>
+
+  <div class="cards">
+    <div class="card"><div class="v">332</div><div class="k">earthquakes loaded</div>
+      <div class="d">M2.5+ worldwide, past 7 days</div></div>
+    <div class="card"><div class="v">M6.4</div><div class="k">strongest</div>
+      <div class="d">southeast of Easter Island · 2026-10-29 07:49:50 UTC · 10 km deep</div></div>
+    <div class="card"><div class="v">642 km</div><div class="k">deepest</div>
+      <div class="d">M5.5 — 283 km E of Levuka, Fiji</div></div>
+    <div class="card"><div class="v">520</div><div class="k">most felt reports</div>
+      <div class="d">M2.73 — 2 km NE of Pacifica, CA · 59 events felt by people</div></div>
+    <div class="card"><div class="v">0</div><div class="k">tsunami-flagged</div>
+      <div class="d">events where USGS set the tsunami flag</div></div>
+  </div>
+
+  <section><h2>Events by magnitude band</h2><div class="bar-row"><span class="bar-label">Minor (2.5-3.9)</span><div class="bar-track"><div class="bar" style="width:100%"></div></div><span class="bar-num">141</span></div>
+<div class="bar-row"><span class="bar-label">Light (4.0-4.9)</span><div class="bar-track"><div class="bar" style="width:97%"></div></div><span class="bar-num">137</span></div>
+<div class="bar-row"><span class="bar-label">Moderate (5.0-5.9)</span><div class="bar-track"><div class="bar" style="width:35%"></div></div><span class="bar-num">50</span></div>
+<div class="bar-row"><span class="bar-label">Strong (6.0+)</span><div class="bar-track"><div class="bar" style="width:3%"></div></div><span class="bar-num">4</span></div></section>
+  <section><h2>Events per day (UTC)</h2><div class="bar-row"><span class="bar-label">2026-10-25</span><div class="bar-track"><div class="bar alt" style="width:52%"></div></div><span class="bar-num">30 (max M5.9)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-26</span><div class="bar-track"><div class="bar alt" style="width:90%"></div></div><span class="bar-num">52 (max M5.5)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-27</span><div class="bar-track"><div class="bar alt" style="width:100%"></div></div><span class="bar-num">58 (max M5.8)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-28</span><div class="bar-track"><div class="bar alt" style="width:86%"></div></div><span class="bar-num">50 (max M6.0)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-29</span><div class="bar-track"><div class="bar alt" style="width:72%"></div></div><span class="bar-num">42 (max M6.4)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-30</span><div class="bar-track"><div class="bar alt" style="width:69%"></div></div><span class="bar-num">40 (max M5.1)</span></div>
+<div class="bar-row"><span class="bar-label">2026-10-31</span><div class="bar-track"><div class="bar alt" style="width:74%"></div></div><span class="bar-num">43 (max M6.0)</span></div>
+<div class="bar-row"><span class="bar-label">2026-11-01</span><div class="bar-track"><div class="bar alt" style="width:29%"></div></div><span class="bar-num">17 (max M5.4)</span></div></section>
+  <section><h2>🌋 The 10 strongest this week</h2>
+    <table><tr><th>Mag</th><th>Place</th><th>When (UTC)</th><th>Depth</th><th>Felt reports</th></tr>
+    <tr><td class='mag'>M6.4</td><td>southeast of Easter Island</td><td>2026-10-29 07:49:50</td><td>10 km</td><td>0</td></tr>
+<tr><td class='mag'>M6.2</td><td>43 km ESE of Port-Olry, Vanuatu</td><td>2026-10-29 21:46:44</td><td>143 km</td><td>5</td></tr>
+<tr><td class='mag'>M6.0</td><td>58 km SSE of Shima, Japan</td><td>2026-10-31 22:15:02</td><td>352 km</td><td>25</td></tr>
+<tr><td class='mag'>M6.0</td><td>214 km NW of Port-Olry, Vanuatu</td><td>2026-10-28 02:21:45</td><td>10 km</td><td>1</td></tr>
+<tr><td class='mag'>M5.9</td><td>218 km ENE of Nagqu, China</td><td>2026-10-25 11:25:57</td><td>7 km</td><td>0</td></tr>
+<tr><td class='mag'>M5.8</td><td>110 km ENE of Barcelona, Philippines</td><td>2026-10-29 03:19:05</td><td>10 km</td><td>3</td></tr>
+<tr><td class='mag'>M5.8</td><td>196 km NW of Port-Olry, Vanuatu</td><td>2026-10-27 08:55:23</td><td>11 km</td><td>0</td></tr>
+<tr><td class='mag'>M5.7</td><td>82 km NE of Kiunga, Papua New Guinea</td><td>2026-10-29 03:26:42</td><td>10 km</td><td>0</td></tr>
+<tr><td class='mag'>M5.7</td><td>271 km WSW of Tual, Indonesia</td><td>2026-10-28 22:06:45</td><td>142 km</td><td>0</td></tr>
+<tr><td class='mag'>M5.6</td><td>174 km NW of Port-Olry, Vanuatu</td><td>2026-10-28 02:59:48</td><td>10 km</td><td>0</td></tr></table></section>
+  <section><h2>Busiest regions</h2>
+    <table><tr><th>Region</th><th>Events</th><th>Avg mag</th><th>Strongest</th></tr>
+    <tr><td>Alaska</td><td>82</td><td>3.04</td><td>M5.0</td></tr>
+<tr><td>Vanuatu</td><td>34</td><td>5.06</td><td>M6.2</td></tr>
+<tr><td>Japan</td><td>14</td><td>4.69</td><td>M6.0</td></tr>
+<tr><td>CA</td><td>14</td><td>2.77</td><td>M4.01</td></tr>
+<tr><td>Indonesia</td><td>13</td><td>4.85</td><td>M5.7</td></tr>
+<tr><td>Philippines</td><td>12</td><td>4.96</td><td>M5.8</td></tr>
+<tr><td>U.S. Virgin Islands</td><td>11</td><td>3.13</td><td>M3.77</td></tr>
+<tr><td>China</td><td>11</td><td>4.74</td><td>M5.9</td></tr></table></section>
+
+  <footer>
+    Built with an open-data ETL pipeline: USGS GeoJSON feed → pandas cleaning with
+    data-quality checks → SQLite with idempotent upserts → SQL analysis → this page.
+    Code: <a href="https://github.com/dxhanjay/earthquake-etl-pipeline">github.com/dxhanjay/earthquake-etl-pipeline</a> ·
+    Data: U.S. Geological Survey (USGS), public domain.
+  </footer>
+</div>
+</body>
+</html>
