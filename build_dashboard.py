@@ -66,19 +66,42 @@ def main() -> int:
     finally:
         conn.close()
 
+    # Span-aware presentation: a week of data reads day by day; a longer
+    # backfilled record aggregates to ISO weeks and renames the page.
+    from datetime import date as _date, timedelta as _td
+    first_d = _date.fromisoformat(first[:10])
+    last_d = _date.fromisoformat(last[:10])
+    span_days = (last_d - first_d).days
+    history_mode = span_days > 10
+    if history_mode:
+        weekly: dict[str, list] = {}
+        for d, c, m in per_day:
+            monday = _date.fromisoformat(d)
+            monday -= _td(days=monday.weekday())
+            slot = weekly.setdefault(monday.isoformat(), [0, 0.0])
+            slot[0] += c
+            slot[1] = max(slot[1], m)
+        per_period = [(f"Week of {k}", v[0], v[1])
+                      for k, v in sorted(weekly.items())]
+        period_label = "Events per week (UTC)"
+    else:
+        per_period = per_day
+        period_label = "Events per day (UTC)"
+    page_title = "The Historical Record" if history_mode else "This Week on Earth"
+
     band_max = max(c for _, c in bands) or 1
     band_rows = "\n".join(
         f'<div class="bar-row"><span class="bar-label">{esc(b)}</span>'
         f'<div class="bar-track"><div class="bar" '
         f'style="width:{max(3, round(c / band_max * 100))}%"></div></div>'
         f'<span class="bar-num">{c}</span></div>' for b, c in bands)
-    day_max = max(c for _, c, _ in per_day) or 1
+    day_max = max(c for _, c, _ in per_period) or 1
     day_rows = "\n".join(
         f'<div class="bar-row"><span class="bar-label">{d}</span>'
         f'<div class="bar-track"><div class="bar alt" '
         f'style="width:{max(3, round(c / day_max * 100))}%"></div></div>'
         f'<span class="bar-num">{c} (max M{m})</span></div>'
-        for d, c, m in per_day)
+        for d, c, m in per_period)
     top_rows = "\n".join(
         f"<tr><td class='mag'>M{mag}</td><td>{esc(place)}</td>"
         f"<td>{utc}</td><td>{depth:.0f} km</td><td>{felt}</td></tr>"
@@ -130,14 +153,14 @@ def main() -> int:
 </head>
 <body>
 <div class="wrap">
-  <h1>🌍 Earthquake <span class="accent">ETL</span> — This Week on Earth</h1>
+  <h1>🌍 Earthquake <span class="accent">ETL</span> — {page_title}</h1>
   <p class="sub">USGS Magnitude 2.5+ earthquakes · {esc(first)} → {esc(last)} (UTC) ·
      extracted, cleaned, quality-checked and loaded by an automated pipeline ·
      dashboard generated {built}</p>
 
   <div class="cards">
     <div class="card"><div class="v">{total}</div><div class="k">earthquakes loaded</div>
-      <div class="d">M2.5+ worldwide, past 7 days</div></div>
+      <div class="d">M2.5+ worldwide · {span_days + 1} days of loaded data</div></div>
     <div class="card"><div class="v">M{strongest[0]}</div><div class="k">strongest</div>
       <div class="d">{esc(strongest[1])} · {esc(strongest[2])} UTC · {strongest[3]:.0f} km deep</div></div>
     <div class="card"><div class="v">{deepest[2]:.0f} km</div><div class="k">deepest</div>
@@ -149,8 +172,8 @@ def main() -> int:
   </div>
 
   <section><h2>Events by magnitude band</h2>{band_rows}</section>
-  <section><h2>Events per day (UTC)</h2>{day_rows}</section>
-  <section><h2>🌋 The 10 strongest this week</h2>
+  <section><h2>{period_label}</h2>{day_rows}</section>
+  <section><h2>🌋 The 10 strongest in the record</h2>
     <table><tr><th>Mag</th><th>Place</th><th>When (UTC)</th><th>Depth</th><th>Felt reports</th></tr>
     {top_rows}</table></section>
   <section><h2>Busiest regions</h2>

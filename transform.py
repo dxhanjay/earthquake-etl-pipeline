@@ -17,8 +17,11 @@ Derived columns:
 Output: data/processed/quakes_clean.csv
 
 Run:  python transform.py   (after extract.py)
+      python transform.py --raw data/raw/usgs_history.geojson
+          (after a historical extract — same cleaning rules apply)
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -41,11 +44,16 @@ def mag_band(mag: float) -> str:
 
 
 def main() -> int:
-    if not RAW_PATH.exists():
-        print(f"{RAW_PATH.name} not found — run extract.py first.")
+    parser = argparse.ArgumentParser(description="Clean a raw USGS extract")
+    parser.add_argument("--raw", type=Path, default=RAW_PATH,
+                        help="raw GeoJSON to clean (default: the weekly feed)")
+    args = parser.parse_args()
+    raw_path = args.raw if args.raw.is_absolute() else BASE / args.raw
+    if not raw_path.exists():
+        print(f"{raw_path.name} not found — run extract.py first.")
         return 1
 
-    data = json.loads(RAW_PATH.read_text(encoding="utf-8"))
+    data = json.loads(raw_path.read_text(encoding="utf-8"))
     rows = []
     for f in data["features"]:
         p = f["properties"]
